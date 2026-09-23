@@ -135,7 +135,7 @@ namespace Assignment7
 
 
         
-        public decimal EstimatedCost
+        public virtual decimal EstimatedCost
         {
             get
             {
@@ -199,7 +199,148 @@ namespace Assignment7
             Console.WriteLine("--------------------------------");
         }
     }
-
+ 
 
     #endregion
+
+    #region Question 3
+    public class StandardShipment : Shipment
+    {
+        public StandardShipment(
+            string trackingCode,
+            string description,
+            decimal weight,
+            decimal deliveryFee,
+            DeliveryAddress destination)
+            : base(
+                trackingCode,
+                description,
+                weight,
+                deliveryFee,
+                destination)
+        {
+        }
+    }
+    public class ExpressShipment : Shipment
+    {
+        private decimal extraFee;
+
+        public decimal ExtraFee
+        {
+            get { return extraFee; }
+            set
+            {
+                if (value >= 0)
+                    extraFee = value;
+            }
+        }
+
+
+        public override decimal EstimatedCost
+        {
+            get
+            {
+                return DeliveryFee + (Weight * 5) + ExtraFee;
+            }
+        }
+
+
+        public ExpressShipment(
+            string trackingCode,
+            string description,
+            decimal weight,
+            decimal deliveryFee,
+            DeliveryAddress destination,
+            decimal extraFee)
+            : base(
+                trackingCode,
+                description,
+                weight,
+                deliveryFee,
+                destination)
+        {
+            ExtraFee = extraFee;
+        }
+
+
+        public override void PrintShipment()
+        {
+            base.PrintShipment();
+
+            Console.WriteLine($"Extra Fee     : {ExtraFee}");
+        }
+        public class InternationalShipment : Shipment
+        {
+            private string destinationCountry;
+            private decimal customsFee;
+
+
+            public string DestinationCountry
+            {
+                get { return destinationCountry; }
+                set
+                {
+                    if (!string.IsNullOrWhiteSpace(value))
+                        destinationCountry = value;
+                }
+            }
+
+
+            public decimal CustomsFee
+            {
+                get { return customsFee; }
+                set
+                {
+                    if (value >= 0)
+                        customsFee = value;
+                }
+            }
+
+
+            public override decimal EstimatedCost
+            {
+                get
+                {
+                    return DeliveryFee + (Weight * 5) + CustomsFee;
+                }
+            }
+
+
+            public InternationalShipment(
+                string trackingCode,
+                string description,
+                decimal weight,
+                decimal deliveryFee,
+                DeliveryAddress destination,
+                string destinationCountry,
+                decimal customsFee)
+                : base(
+                    trackingCode,
+                    description,
+                    weight,
+                    deliveryFee,
+                    destination)
+            {
+                DestinationCountry = destinationCountry;
+                CustomsFee = customsFee;
+            }
+
+
+            public override void PrintShipment()
+            {
+                base.PrintShipment();
+
+                Console.WriteLine($"Country       : {DestinationCountry}");
+                Console.WriteLine($"Customs Fee   : {CustomsFee}");
+            }
+        }
+
+
+
+
+    }
+
+    #endregion
+
+
 }
